@@ -1,0 +1,46 @@
+{
+  "shift_date": "2026-08-17",
+  "on_call_engineer": "Priya N.",
+  "incidents": [
+    {
+      "id": "INC-4471",
+      "severity": "SEV2",
+      "title": "Checkout API latency spike",
+      "status": "resolved",
+      "opened": "09:12",
+      "closed": "09:58",
+      "notes": "Rolled back a bad deploy on payments-service. Metrics returned to baseline within 15 min of rollback."
+    },
+    {
+      "id": "INC-4472",
+      "severity": "SEV3",
+      "title": "Elevated 5xx on search-service",
+      "status": "resolved",
+      "opened": "11:30",
+      "closed": "11:45",
+      "notes": "Auto-scaled search-service pods; error rate dropped after scale-up."
+    },
+    {
+      "id": "INC-4473",
+      "severity": "SEV1",
+      "title": "Database replica lag on orders-db",
+      "status": "watching",
+      "opened": "14:05",
+      "closed": null,
+      "notes": "Replica lag reduced from 340s to 40s after killing a long-running query, but hasn't fully returned to baseline (<5s). Flagged for next shift to keep monitoring."
+    },
+    {
+      "id": "INC-4474",
+      "severity": "SEV3",
+      "title": "Alert noise from staging cluster",
+      "status": "resolved",
+      "opened": "16:20",
+      "closed": "16:22",
+      "notes": "False positive, staging monitor misconfigured. Ticket filed to fix the alert threshold, not urgent."
+    }
+  ],
+  "open_followups": [
+    "Fix staging alert threshold for INC-4474 (low priority, ticket OPS-891)",
+    "Confirm orders-db replica lag returns to baseline (INC-4473)"
+  ]
+}
