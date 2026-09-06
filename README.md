@@ -14,25 +14,29 @@ follow-up item, the next on-call engineer starts their shift blind.
 This project adds that missing second pass: one agent drafts the note,
 a second agent independently reviews it against a checklist and either
 approves it or rewrites it - the same "verify before you trust the output"
-pattern used in `closed-loop-verifier`, applied to a different problem.
+pattern used in [closed-loop-verifier](https://github.com/SwethaJustin1/closed-loop-verifier),
+applied to a different problem
 
 ## How it works
 
 ```
 Incident log (mock-data/oncall-log.json)
-        │
-        ▼
-┌─────────────────┐      writes state['draft_handoff']
-│   Draft Agent    │ ───────────────────────────────────┐
-│  (LlmAgent)       │                                     │
-└─────────────────┘                                     ▼
-                                              ┌─────────────────┐
-                                              │  Review Agent    │
-                                              │  (LlmAgent)       │
-                                              └─────────────────┘
-                                                          │
-                                                          ▼
-                                          VERDICT + final handoff note
+              │
+              ▼
+    ┌───────────────────┐
+    │    Draft Agent    │
+    │    (LlmAgent)     │
+    └───────────────────┘
+              │
+              │  state['draft_handoff']
+              ▼
+    ┌───────────────────┐
+    │   Review Agent    │
+    │    (LlmAgent)     │
+    └───────────────────┘
+              │
+              ▼
+    VERDICT + final handoff note
 ```
 
 - **Draft Agent** calls a `FunctionTool` (`get_oncall_log`) to fetch today's
@@ -95,6 +99,16 @@ npx adk web             # chat with it in a local browser UI at localhost:8000
 ```
 
 Try prompting it with: `"Give me today's handoff"`
+
+
+## What this doesn't solve
+
+The Review Agent is the same model family as the Draft Agent, so it shares
+its blind spots. If the drafter misreads an incident log in a particular way,
+the reviewer may well misread it the same way. An independent check run by a
+near-identical checker is weaker than it looks - a real version would want
+either a different model, or a rule-based check the LLM can't talk itself
+out of.
 
 ## What's next (not built yet)
 
